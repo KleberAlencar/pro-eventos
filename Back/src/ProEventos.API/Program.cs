@@ -14,6 +14,8 @@ builder.Services.AddControllers().AddNewtonsoftJson(
     x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore    
 );
 
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
 builder.Services.AddScoped<IEventoService, EventoService>();
 builder.Services.AddScoped<IGeralPersistence, GeralPersistence>();
 builder.Services.AddScoped<IEventoPersistence, EventoPersistence>();
