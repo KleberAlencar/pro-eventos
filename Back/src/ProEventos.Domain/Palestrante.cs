@@ -1,3 +1,5 @@
+using ProEventos.Domain.Identity;
+
 namespace ProEventos.Domain
 {
     public class Palestrante
@@ -13,6 +15,10 @@ namespace ProEventos.Domain
         public string Telefone { get; set; }
 
         public string Email { get; set; }
+
+        public int UserId { get; set; }
+
+        public User User { get; set; }
 
         public IEnumerable<RedeSocial> RedesSociais { get; set; }
 

@@ -30,6 +30,11 @@ namespace ProEventos.Application.Dtos
         [EmailAddress(ErrorMessage = "O campo {0} deve ser um formato válido")]
         public string Email { get; set; }
 
+        [Required]
+        public int UserId { get; set; }
+
+        public UserDto UserDto { get; set; }
+
         public IEnumerable<LoteDto> Lotes { get; set; }
 
         public IEnumerable<RedeSocialDto> RedesSociais { get; set; }

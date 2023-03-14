@@ -1,3 +1,4 @@
+using ProEventos.Domain.Identity;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ProEventos.Domain
@@ -20,6 +21,10 @@ namespace ProEventos.Domain
         public string Telefone { get; set; }
 
         public string Email { get; set; }
+
+        public int UserId { get; set; }
+
+        public User User { get; set; }
 
         public IEnumerable<Lote> Lotes { get; set; }
 

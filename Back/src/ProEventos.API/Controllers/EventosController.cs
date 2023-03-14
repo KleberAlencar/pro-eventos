@@ -1,18 +1,29 @@
 using Microsoft.AspNetCore.Mvc;
+using ProEventos.API.Extensions;
 using ProEventos.Application.Dtos;
 using ProEventos.Application.Contratos;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ProEventos.API.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/[controller]")]
 public class EventosController : ControllerBase
 {
     private readonly IEventoService _eventoService;
+    private readonly IWebHostEnvironment _hostEnvironment;
+    private readonly IAccountService _accountService;
 
-    public EventosController(IEventoService eventoService)
+    public EventosController(
+        IEventoService eventoService,
+        IWebHostEnvironment hostEnvironment,
+        IAccountService accountService
+    )
     {
         _eventoService = eventoService;
+        _hostEnvironment = hostEnvironment;
+        _accountService = accountService;
     }
 
     [HttpGet]
@@ -20,7 +31,7 @@ public class EventosController : ControllerBase
     {
         try
         {    
-            var eventos = await _eventoService.GetAllEventosAsync(true);
+            var eventos = await _eventoService.GetAllEventosAsync(User.GetUserId(), true);
             if (eventos == null) return NoContent();    
 
             return Ok(eventos);        
@@ -36,7 +47,7 @@ public class EventosController : ControllerBase
     {
         try
         {    
-            var evento = await _eventoService.GetEventoByIdAsync(id, true);
+            var evento = await _eventoService.GetEventoByIdAsync(User.GetUserId(), id, true);
             if (evento == null) return NoContent();
 
             return Ok(evento);        
@@ -52,7 +63,7 @@ public class EventosController : ControllerBase
     {
         try
         {    
-            var eventos = await _eventoService.GetAllEventosByTemaAsync(tema, true);
+            var eventos = await _eventoService.GetAllEventosByTemaAsync(User.GetUserId(), tema, true);
             if (eventos == null) return NoContent();
 
             return Ok(eventos);        
@@ -68,7 +79,7 @@ public class EventosController : ControllerBase
     {
         try
         {    
-            var evento = await _eventoService.AddEvento(model);
+            var evento = await _eventoService.AddEvento(User.GetUserId(), model);
             if (evento == null) return NoContent();
 
             return Ok(evento);        
@@ -84,7 +95,7 @@ public class EventosController : ControllerBase
     {
         try
         {    
-            var evento = await _eventoService.UpdateEvento(id, model);
+            var evento = await _eventoService.UpdateEvento(User.GetUserId(), id, model);
             if (evento == null) return NoContent();
 
             return Ok(evento);        
@@ -100,10 +111,10 @@ public class EventosController : ControllerBase
     {
         try
         {    
-            var evento = await _eventoService.GetEventoByIdAsync(id, true);
+            var evento = await _eventoService.GetEventoByIdAsync(User.GetUserId(), id, true);
             if (evento == null) return NoContent();
 
-            return await _eventoService.DeleteEvento(id) ? Ok("Deletado") : throw new Exception("Erro ao deletar");
+            return await _eventoService.DeleteEvento(User.GetUserId(), id) ? Ok("Deletado") : throw new Exception("Erro ao deletar");
         }
         catch (Exception ex)
         {            
